@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -33,7 +34,6 @@ public class UserController {
      */
     @PostMapping("/register")
     public ResultApi create(
-
             @RequestBody @Valid UserRegisterForm userForm,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -56,6 +56,27 @@ public class UserController {
         user.setUserType(0);//默认0普通用户
 
         UserBean result = repository.save(user);
+        return ResultApiUtil.success(result);
+    }
+
+    /**
+     * 用户地址修改
+     */
+    @PostMapping("/changeAddress")
+    public ResultApi changeAddress(
+            @RequestParam("userPhone") String userPhone,
+            @RequestParam("address") String address) {
+        if (StringUtils.isEmpty(userPhone)) {
+            return ResultApiUtil.error(ResultEnum.USER_NO);
+        }
+        if (StringUtils.isEmpty(address)) {
+            return ResultApiUtil.error("地址不能为空");
+        }
+
+        UserBean userBean = repository.findByUserPhone(userPhone);
+        userBean.setAddress(address);
+
+        UserBean result = repository.save(userBean);
         return ResultApiUtil.success(result);
     }
 

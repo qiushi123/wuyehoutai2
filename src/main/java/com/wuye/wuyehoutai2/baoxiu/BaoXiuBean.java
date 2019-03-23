@@ -39,7 +39,10 @@ public class BaoXiuBean {
     private String phone;
     private String content;
     private String address;
-    private Integer baixiuType;//0刚报修，1已被接单等待处理，2已处理，3完成评价
+    private Integer baoxiuType;//0待维修，1已接单，2已处理待支付，3已支付待评价，4已完成
+    private String comment;//评价内容
+
+    private int price;//维修费用
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
